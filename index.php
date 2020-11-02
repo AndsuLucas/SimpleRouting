@@ -8,7 +8,7 @@ $request = new Request();
 $router = new SimpleRouter($request);
 
 $router->add('/', function($request) {
-	echo json_encode($request);
+    echo json_encode($request);
 });
 
 $router->add('/sum', 'Routing\Controller\SumController@getSum');
