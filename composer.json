@@ -1,0 +1,18 @@
+{
+    "name": "andersonlucas/routing",
+    "description": "The implementation of a simple route system from scratch with reflection",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Anderson Lucas",
+            "email": "a.lucassilvadeoliveira@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Routing\\": "src/"
+        }
+    }
+}
