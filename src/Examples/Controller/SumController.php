@@ -1,8 +1,8 @@
 <?php
-namespace Routing\Controller;
+namespace Routing\Examples\Controller;
 
-use Routing\ControllerDependences\Calculator;
-use Routing\Http\Request;
+use Routing\Examples\ControllerDependences\Calculator;
+use Routing\Http\Requests\Request;
 
 final class SumController
 {

@@ -9,7 +9,9 @@
             "email": "a.lucassilvadeoliveira@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "phpunit/phpunit": "^9.4"
+    },
     "autoload": {
         "psr-4": {
             "Routing\\": "src/"
