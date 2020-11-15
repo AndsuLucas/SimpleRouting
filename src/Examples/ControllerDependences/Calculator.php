@@ -1,5 +1,5 @@
 <?php
-namespace Routing\ControllerDependences;
+namespace Routing\Examples\ControllerDependences;
 
 final class Calculator
 {

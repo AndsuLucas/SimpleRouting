@@ -2,15 +2,19 @@
 require_once __DIR__ . "/vendor/autoload.php";
 
 use Routing\Router\SimpleRouter;
-use Routing\Http\Request;
+use Routing\Http\Requests\Request;
+use Routing\Router\Factory\Entity\EntitySignatureFactory;
+
 
 $request = new Request();
-$router = new SimpleRouter($request);
+$router = new SimpleRouter(
+    (new EntitySignatureFactory())
+);
 
 $router->add('/', function($request) {
-    echo json_encode($request);
+    echo $request->json();
 });
 
-$router->add('/sum', 'Routing\Controller\SumController@getSum');
+$router->add('/sum', 'Routing\Examples\Controller\SumController@getSum');
 
 $router->listen($request);

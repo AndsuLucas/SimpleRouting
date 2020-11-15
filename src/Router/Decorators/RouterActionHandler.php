@@ -1,57 +1,48 @@
 <?php 
 namespace Routing\Router\Decorators;
 
-use Routing\Http\Request;
+use\Routing\Http\Requests\RequestInterface;
+use Routing\Router\Factory\EntitySignatureFactory;
 
 trait RouterActionHandler
 {
-    protected function handle($action, Request $request)
+
+    protected function handle($action, RequestInterface $request)
     {
-        /**
-        * TODO: CREATE A FACTORY
-        */
         if (is_callable($action)) {
             $action($request);
             return;
         }
 
-        $actionInfo = explode('@', $action);
-        $class = $actionInfo[0];
-        $method = $actionInfo[1];
-        
-        if (empty($class) || empty($method)) {
-            return;
+        $classInfo = $this->exctratClassMethod($action);
+        $className = $classInfo[0];
+        $method = $classInfo[1];
+
+        if (empty($className) || empty($method)) {
+            throw new \Exception('Please use the pattern "class@method"', 1);
         }
 
-        if (!class_exists($class)) {
-            return;
+        $instance = $this->entityFactory->getSignature($classInfo[0]);
+
+        if (!method_exists($className, $method)) {
+            throw new \Exception("Class $class don't have method $method.", 1);
         }
 
-        $reflectionClass = new \ReflectionClass($class);
-        if (!$reflectionClass->hasMethod('__construct')) {
-            return;
+        $this->execute($instance, $method, $request);
+    }
+
+    private function exctratClassMethod(string $actionString): array
+    {
+        $classInfo = explode('@', $actionString);
+        if (!$classInfo[0] || !$classInfo[1]) {
+            return [];
         }
 
-        if (!$reflectionClass->hasMethod($method)) {
-            return;
-        }
+        return $classInfo;
+    }
 
-        $constructor = $reflectionClass->getConstructor();
-        $parameters = array_map(function($parameter) use($reflectionClass) {
-            // ignore for a while
-            if (!class_exists($parameter->getType())) {
-                return;
-            }
-
-            // for a while whitout recursive construct      
-            return (
-                new \ReflectionClass((string) $parameter->getType())
-            )->newInstance();
-        }, 
-            $constructor->getParameters($constructor)
-        );
-        
-        $instance = $reflectionClass->newInstanceArgs($parameters);
-        $instance->$method($request);   
-    }   
+    private function execute(object $class = null, $action, $req)
+    {
+        $class->$action($req);
+    }
 }
