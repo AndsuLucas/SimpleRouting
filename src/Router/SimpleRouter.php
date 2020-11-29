@@ -3,6 +3,7 @@ namespace Routing\Router;
 
 use Routing\Http\Requests\RequestInterface;
 use Routing\Router\Factory\Entity\EntitySignatureFactoryInterface;
+use Routing\Router\Factory\Method\MethodSignatureFactoryInterface;
 
 final class SimpleRouter extends RouterInterface
 {   
@@ -11,8 +12,15 @@ final class SimpleRouter extends RouterInterface
     private $paths = [];
     private $request;
 
-    public function __construct(EntitySignatureFactoryInterface $entityFactory) {
+    protected $entityFactory;
+    protected $methodFactory;
+
+    public function __construct(
+        EntitySignatureFactoryInterface $entityFactory,
+        MethodSignatureFactoryInterface $methodFactory
+    ) {
         $this->entityFactory = $entityFactory;
+        $this->methodFactory = $methodFactory;
     }
 
     public function add(string $path, $action)

@@ -1,12 +1,11 @@
 <?php 
 namespace Routing\Router\Decorators;
 
-use\Routing\Http\Requests\RequestInterface;
+use Routing\Http\Requests\RequestInterface;
 use Routing\Router\Factory\EntitySignatureFactory;
 
 trait RouterActionHandler
 {
-
     protected function handle($action, RequestInterface $request)
     {
         if (is_callable($action)) {

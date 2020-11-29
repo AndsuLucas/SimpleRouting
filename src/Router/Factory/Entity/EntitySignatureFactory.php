@@ -10,7 +10,7 @@ final class EntitySignatureFactory implements EntitySignatureFactoryInterface
     public function getSignature(string $class): object
     {
         if (!class_exists($class)) {
-            throw new \Exception("Class $class don't exists.", 1);
+            throw new \InvalidArgumentException("Class $class don't exists.");
         }
 
         $refClass = new ReflectionClass($class);
@@ -27,8 +27,12 @@ final class EntitySignatureFactory implements EntitySignatureFactoryInterface
         $constructor = $ref->getConstructor();
         $parameters = array_map(function($parameter) use($ref) {
 
-            $dependence = $parameter->getType()->getName();
-            return (new ReflectionClass($dependence))->newInstance();
+            $parameterType = $parameter->getType();
+            if (is_null($parameterType)) {
+                throw new \DomainException("Cannot resolve parameter: $parameter->getName().");
+            }
+
+            return (new ReflectionClass($parameterType->getName()))->newInstance();
 
         }, $constructor->getParameters());
 
